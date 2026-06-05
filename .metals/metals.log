@@ -1,0 +1,95 @@
+2026.06.02 17:34:58 INFO  Started: Metals version 1.6.7 in folders '/home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton' for client Visual Studio Code 1.114.0.
+2026.06.02 17:34:58 INFO  Memory monitor started
+2026.06.02 17:34:59 WARN  Using H2 2.4.240 which is newer than the version Flyway has been verified with. The latest verified version of H2 is 2.3.232.
+2026.06.02 17:38:39 INFO  running '/home/rafael/.local/share/coursier/bin/sbt -Dbloop.export-jar-classifiers=sources bloopInstall'
+2026.06.02 17:38:40 WARN  no build target for: /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/project/metals.sbt
+2026.06.02 17:38:40 INFO  no build target found for /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/project/metals.sbt. Using presentation compiler with project's scala-library version: 3.3.7
+2026.06.02 17:38:47 ERROR [info] [launcher] getting org.scala-sbt sbt 1.12.4  (this may take some time)...
+2026.06.02 17:38:51 INFO  [info] welcome to sbt 1.12.4 (Ubuntu Java 21.0.11)
+2026.06.02 17:38:54 INFO  [info] loading settings for project skeleton-build-build from metals.sbt...
+2026.06.02 17:38:54 INFO  [info] loading project definition from /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/project/project
+2026.06.02 17:38:56 INFO  [info] loading settings for project skeleton-build from metals.sbt...
+2026.06.02 17:38:56 INFO  [info] loading project definition from /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/project
+2026.06.02 17:38:59 INFO  [success] Generated .bloop/skeleton-build.json
+2026.06.02 17:38:59 INFO  [success] Total time: 2 s, completed 2 jun 2026, 17:38:59
+2026.06.02 17:39:01 INFO  [info] loading settings for project skeleton from ._build.sbt, build.sbt...
+2026.06.02 17:39:01 INFO  [info] set current project to reddit-ner-scala (in build file:/home/rafael/Documentos/Paradigmas%20de%20programacion/Lab3/skeleton/skeleton/)
+2026.06.02 17:39:01 INFO  [warn] there's a key that's not used by any other settings/tasks:
+2026.06.02 17:39:01 INFO  [warn]  
+2026.06.02 17:39:01 INFO  [warn] * ThisBuild / classLoaderLayeringStrategy
+2026.06.02 17:39:01 INFO  [warn]   +- /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/build.sbt:7
+2026.06.02 17:39:01 INFO  [warn]  
+2026.06.02 17:39:01 INFO  [warn] note: a setting might still be used by a command; to exclude a key from this `lintUnused` check
+2026.06.02 17:39:01 INFO  [warn] either append it to `Global / excludeLintKeys` or call .withRank(KeyRanks.Invisible) on the key
+2026.06.02 17:39:02 INFO  [success] Generated .bloop/skeleton.json
+2026.06.02 17:39:02 INFO  [success] Generated .bloop/skeleton-test.json
+2026.06.02 17:39:02 INFO  [success] Total time: 1 s, completed 2 jun 2026, 17:39:02
+2026.06.02 17:39:03 INFO  time: ran 'sbt bloopInstall' in 23s
+2026.06.02 17:39:03 INFO  Attempting to connect to the build server...
+2026.06.02 17:39:03 INFO  No running Bloop server found, starting one.
+2026.06.02 17:39:03 INFO  Starting compilation server
+2026.06.02 17:39:05 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/.metals/bsp.trace.json or /home/rafael/.cache/metals/bsp.trace.json
+2026.06.02 17:39:05 INFO  Attempting to connect to the build server...
+2026.06.02 17:39:05 INFO  Found a Bloop server running
+2026.06.02 17:39:05 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/project/.metals/bsp.trace.json or /home/rafael/.cache/metals/bsp.trace.json
+2026.06.02 17:39:05 INFO  time: Connected to build server in 2.79s
+2026.06.02 17:39:05 INFO  Connected to Build server: Bloop v2.0.19
+2026.06.02 17:39:05 INFO  time: Imported build in 0.15s
+2026.06.02 17:39:09 WARN  Could not find java sources in /usr/lib/jvm/src.zip, /usr/lib/jvm/lib/src.zip, /usr/lib/jvm/java-21-openjdk-amd64/src.zip, /usr/lib/jvm/java-21-openjdk-amd64/lib/src.zip. Java symbols will not be available.
+2026.06.02 17:39:12 INFO  compiling skeleton (10 scala sources)
+2026.06.02 17:39:22 INFO  time: indexed workspace in 16s
+2026.06.02 17:39:28 INFO  time: compiled skeleton in 16s
+2026.06.02 20:25:14 INFO  Shut down connection with build server.
+2026.06.02 20:25:14 INFO  Shut down connection with build server.
+2026.06.02 20:25:14 ERROR Bloop 'bsp' command exited with code 1. Something may be wrong with the current configuration.
+Running the [1mclean[0m sub-command to clear the working directory and remove caches might help.
+If the error persists, please report the issue as a bug and attach a log with increased verbosity by passing [1m-v -v -v[0m.
+2026.06.02 20:25:14 ERROR Bloop 'bsp' command exited with code 1. Something may be wrong with the current configuration.
+Running the [1mclean[0m sub-command to clear the working directory and remove caches might help.
+If the error persists, please report the issue as a bug and attach a log with increased verbosity by passing [1m-v -v -v[0m.
+2026.06.03 16:37:50 INFO  Started: Metals version 1.6.7 in folders '/home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton' for client Visual Studio Code 1.114.0.
+2026.06.03 16:37:50 INFO  Memory monitor started
+2026.06.03 16:37:51 WARN  Using H2 2.4.240 which is newer than the version Flyway has been verified with. The latest verified version of H2 is 2.3.232.
+2026.06.03 16:37:51 INFO  no build target found for /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/src/main/scala/Main.scala. Using presentation compiler with project's scala-library version: 3.3.7
+2026.06.03 16:37:53 INFO  no build target found for /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/src/main/scala/Main.scala. Using presentation compiler with project's scala-library version: 3.3.7
+2026.06.03 16:37:54 INFO  Attempting to connect to the build server...
+2026.06.03 16:37:54 INFO  No running Bloop server found, starting one.
+jun 03, 2026 4:37:54 P. M. org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFORMACIÓN: Unsupported notification method: $/setTrace
+jun 03, 2026 4:37:55 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+ADVERTENCIA: Unmatched cancel notification for request id 2
+2026.06.03 16:37:55 INFO  no build target found for /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/src/main/scala/Main.scala. Using presentation compiler with project's scala-library version: 3.3.7
+2026.06.03 16:37:55 INFO  Starting compilation server
+2026.06.03 16:37:58 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/.metals/bsp.trace.json or /home/rafael/.cache/metals/bsp.trace.json
+2026.06.03 16:37:59 INFO  Attempting to connect to the build server...
+2026.06.03 16:37:59 INFO  Found a Bloop server running
+2026.06.03 16:37:59 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/project/.metals/bsp.trace.json or /home/rafael/.cache/metals/bsp.trace.json
+2026.06.03 16:37:59 INFO  time: Connected to build server in 5.26s
+2026.06.03 16:37:59 INFO  Connected to Build server: Bloop v2.0.19
+2026.06.03 16:37:59 INFO  time: Imported build in 0.17s
+2026.06.03 16:38:02 WARN  Could not find java sources in /usr/lib/jvm/src.zip, /usr/lib/jvm/lib/src.zip, /usr/lib/jvm/java-21-openjdk-amd64/src.zip, /usr/lib/jvm/java-21-openjdk-amd64/lib/src.zip. Java symbols will not be available.
+2026.06.03 16:38:02 INFO  time: indexed workspace in 3.7s
+2026.06.03 17:23:47 INFO  Shut down connection with build server.
+2026.06.03 17:23:47 INFO  Shut down connection with build server.
+2026.06.04 21:41:14 INFO  Started: Metals version 1.6.7 in folders '/home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton' for client Visual Studio Code 1.114.0.
+2026.06.04 21:41:14 INFO  Memory monitor started
+2026.06.04 21:41:15 WARN  Using H2 2.4.240 which is newer than the version Flyway has been verified with. The latest verified version of H2 is 2.3.232.
+2026.06.04 21:41:15 INFO  no build target found for /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/src/main/scala/CommandLineArgs.scala. Using presentation compiler with project's scala-library version: 3.3.7
+2026.06.04 21:41:17 INFO  no build target found for /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/src/main/scala/CommandLineArgs.scala. Using presentation compiler with project's scala-library version: 3.3.7
+jun 04, 2026 9:41:17 P. M. org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFORMACIÓN: Unsupported notification method: $/setTrace
+jun 04, 2026 9:41:17 P. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+ADVERTENCIA: Unmatched cancel notification for request id 2
+2026.06.04 21:41:18 INFO  no build target found for /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/src/main/scala/CommandLineArgs.scala. Using presentation compiler with project's scala-library version: 3.3.7
+2026.06.04 21:41:17 INFO  Attempting to connect to the build server...
+2026.06.04 21:41:17 INFO  No running Bloop server found, starting one.
+2026.06.04 21:41:20 INFO  Starting compilation server
+2026.06.04 21:41:22 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/.metals/bsp.trace.json or /home/rafael/.cache/metals/bsp.trace.json
+2026.06.04 21:41:23 INFO  Attempting to connect to the build server...
+2026.06.04 21:41:23 INFO  Found a Bloop server running
+2026.06.04 21:41:23 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at /home/rafael/Documentos/Paradigmas de programacion/Lab3/skeleton/skeleton/project/.metals/bsp.trace.json or /home/rafael/.cache/metals/bsp.trace.json
+2026.06.04 21:41:23 INFO  time: Connected to build server in 5.21s
+2026.06.04 21:41:23 INFO  Connected to Build server: Bloop v2.0.19
+2026.06.04 21:41:23 INFO  time: Imported build in 0.17s
+2026.06.04 21:41:26 WARN  Could not find java sources in /usr/lib/jvm/src.zip, /usr/lib/jvm/lib/src.zip, /usr/lib/jvm/java-21-openjdk-amd64/src.zip, /usr/lib/jvm/java-21-openjdk-amd64/lib/src.zip. Java symbols will not be available.
+2026.06.04 21:41:26 INFO  time: indexed workspace in 3.42s
