@@ -1,4 +1,15 @@
+//import Spark
+import org.apache.spark.sql.SparkSession
+
 object Main {
+  
+  //Create SparkSession in mode local
+  val spark = SparkSession.builder()
+  .appName("RedditNER")
+  .master("local[*]")
+  .getOrCreate()
+  val sc = spark.sparkContext
+
   def main(args: Array[String]): Unit = {
     // Parse command-line arguments
     val cmdArgs = CommandLineArgs.parse(args) match {
@@ -12,36 +23,60 @@ object Main {
     // Filter out malformed subscriptions (None values)
     val subscriptions = subscriptionOpts.flatten
 
-    // Download feeds and parse posts, tracking success/failure
-    val downloadResults = subscriptions.map { subscription =>
-      val feedOpt = FileIO.downloadFeed(subscription.url)
-      val posts = feedOpt.fold(List[Post]())(JsonParser.parsePosts(_, subscription.name))
-      (feedOpt.isDefined, posts)
+    //Load subscritpions in RDD
+    val subscriptionsRDD = sc.parallelize(subscriptions)
+
+    //Create Accumulators
+    val downloadFeedSuccess = sc.longAccumulator("Feeds Success")   //Feeds descargados con exito
+    val feedsFailed = sc.longAccumulator("Feeds Failed")           //Feeds que fallaron
+    val postsDownloads = sc.longAccumulator("Posts Download")        //posts descargados en total
+    val postsDiscard = sc.longAccumulator("Posts Discard")        //posts descartados por texto nulo o vacio
+
+    // Download feeds and parse posts, manejo excepciones
+    val downloadResults = subscriptionsRDD.flatMap { subscription =>
+      try{
+        val feedOpt = FileIO.downloadFeed(subscription.url)
+        downloadFeedSuccess.add(1)
+        val posts = feedOpt.fold(List[Post]())(JsonParser.parsePosts(_, subscription.name))
+        postsDownloads.add(posts.length) 
+        postsDiscard.add(posts.length - Analyzer.filterEmptyPosts(posts).length)
+        val iterator : Iterator[Post] = posts.iterator
+        iterator
+      } catch {
+        case e : Exception =>
+          feedsFailed.add(1)
+          Iterator.empty
+      }      
     }
 
     // Count feed successes/failures
-    val feedsSuccess = downloadResults.count(_._1)
-    val feedsFailed = downloadResults.length - feedsSuccess
-
-    // Flatten all posts and count JSON parse failures
-    val allPosts = downloadResults.flatMap(_._2)
-    val postsSuccess = allPosts.length
-    val postsFailed = downloadResults.count(_._2.isEmpty)
+    downloadResults.count()
+    println(downloadFeedSuccess.value)
+    println(feedsFailed.value)
+    println(postsDownloads.value)
+    println(postsDiscard.value)  
+    
 
     // Filter empty posts
-    val filteredPosts = Analyzer.filterEmptyPosts(allPosts)
-    val postsFiltered = allPosts.length - filteredPosts.length
+    val filteredPosts = downloadResults.filter { post =>
+      post.title.nonEmpty &&
+      post.selftext.nonEmpty &&
+      post.selftext.trim.nonEmpty
+    }
+
+    val postsFiltered = postsDiscard.value  //cantidad de posts filtrados (los vacios)
 
     // Calculate average characters in filtered posts
     val totalChars = filteredPosts.map(post => post.title.length + post.selftext.length).sum
-    val avgChars = if (filteredPosts.nonEmpty) totalChars / filteredPosts.length else 0
+    val avgChars = if ((postsDownloads.value - postsDiscard.value) > 0) totalChars / filteredPosts.count() else 0    //filteredPosts.nonEmpty por postsDownloads - postsDiscards que son RDD y length por count
+ 
 
     // Prepare statistics
     val stats = Map(
-      "feedsSuccess" -> feedsSuccess,
-      "feedsFailed" -> feedsFailed,
-      "postsSuccess" -> postsSuccess,
-      "postsFailed" -> postsFailed,
+      "feedsSuccess" -> downloadFeedSuccess.value,
+      "feedsFailed" -> feedsFailed.value,
+      "postsSuccess" -> postsDownloads.value,
+      "postsFailed" -> postsDiscard.value,
       "postsFiltered" -> postsFiltered,
       "avgChars" -> avgChars
     )
@@ -51,7 +86,7 @@ object Main {
     println()
 
     // Check if we have any posts to process
-    if (filteredPosts.isEmpty) {
+    if (filteredPosts.count() == 0) {
       println("Error: No valid posts downloaded after filtering")
       return
     }

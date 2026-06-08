@@ -55,8 +55,7 @@ Todos los pasos del pipeline pueden ejecutarse de forma independiente entre work
 ## Restricciones sobre funciones en un entrono distribuido
 
 Todo lo que use la función debe ser serializable (Debe ser posible pasarlo a Bytes para poder enviarlo por la red a los workers),
-además no podemos depender de estado compartido entre los workers, al menos que sea realmente necesario comunicarlos
-entre si, y para eso deberíamos de usar un Accummulator.
+además no podemos depender de estado compartido entre los workers, al menos que sea realmente necesario comunicar informacion al driver, y para eso deberíamos de usar un Accummulator.
 Por ultimo debemos asegurar no tener efectos secundarios, porque Spark podría re ejecutar las tareas fallidas!
 
 ## Diagrama de flujo
