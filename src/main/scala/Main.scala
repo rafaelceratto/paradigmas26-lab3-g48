@@ -73,12 +73,12 @@ object Main {
 
     // Prepare statistics
     val stats = Map(
-      "feedsSuccess" -> downloadFeedSuccess.value,
-      "feedsFailed" -> feedsFailed.value,
-      "postsSuccess" -> postsDownloads.value,
-      "postsFailed" -> postsDiscard.value,
-      "postsFiltered" -> postsFiltered,
-      "avgChars" -> avgChars
+      "feedsSuccess" -> downloadFeedSuccess.value.toInt, //lo paso a Int pues devuelve long y stats espera un Int
+      "feedsFailed" -> feedsFailed.value.toInt,
+      "postsSuccess" -> postsDownloads.value.toInt,
+      "postsFailed" -> postsDiscard.value.toInt,
+      "postsFiltered" -> postsFiltered.toInt,
+      "avgChars" -> avgChars.toInt
     )
 
     // Print output
@@ -99,10 +99,15 @@ object Main {
       val combinedText = post.title + " " + post.selftext
       Analyzer.detectEntities(combinedText, dictionary)
     }
+    
+    // countByValue ya devuelve un Map directamente
+    val typeStats = allEntities
+    .map(_.entityType)
+    .countByValue()   // devuelve Map[String, Long], no necesita collect masivo
 
-    // Count entities
-    val entityCounts = Analyzer.countEntities(allEntities)
-    val typeStats = Analyzer.countByType(allEntities)
+    val entityCounts = allEntities
+    .map(_.text)
+    .countByValue()
 
     println(Formatters.formatTypeStats(typeStats))
     println()
