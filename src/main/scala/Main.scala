@@ -1,5 +1,7 @@
 //import Spark
 import org.apache.spark.sql.SparkSession
+import java.io.FileNotFoundException
+import org.json4s.ParserUtil.ParseException
 
 object Main {
   
@@ -22,6 +24,10 @@ object Main {
 
     // Filter out malformed subscriptions (None values)
     val subscriptions = subscriptionOpts.flatten
+    if(subscriptions.isEmpty){ //Error no tengo subscripciones
+      println(s"Error: No valid subscriptions found");
+      return //salgo del programa
+    }
 
     //Load subscritpions in RDD
     val subscriptionsRDD = sc.parallelize(subscriptions)
@@ -34,19 +40,25 @@ object Main {
 
     // Download feeds and parse posts, manejo excepciones
     val downloadResults = subscriptionsRDD.flatMap { subscription =>
-      try{
         val feedOpt = FileIO.downloadFeed(subscription.url)
-        downloadFeedSuccess.add(1)
-        val posts = feedOpt.fold(List[Post]())(JsonParser.parsePosts(_, subscription.name))
-        postsDownloads.add(posts.length) 
-        postsDiscard.add(posts.length - Analyzer.filterEmptyPosts(posts).length)
-        val iterator : Iterator[Post] = posts.iterator
-        iterator
-      } catch {
-        case e : Exception =>
+        if (feedOpt.isEmpty) { //manejo de error desde File.IO
+          println(s"Warning: Failed to download from '${subscription.name}' (${subscription.url})")
           feedsFailed.add(1)
           Iterator.empty
-      }      
+        } else {
+           downloadFeedSuccess.add(1)
+          try{ //manejo de errores en el parseo
+            val posts = feedOpt.fold(List[Post]())(JsonParser.parsePosts(_, subscription.name))
+            postsDownloads.add(posts.length) 
+            postsDiscard.add(posts.length - Analyzer.filterEmptyPosts(posts).length)
+            val iterator : Iterator[Post] = posts.iterator
+           iterator
+          } catch {
+            case e : ParseException =>
+              println(s"Warning: Failed to parse posts from '${subscription.name}' (${subscription.url})")
+              Iterator.empty
+          }
+        }   
     }
 
     // Count feed successes/failures
@@ -99,15 +111,17 @@ object Main {
       val combinedText = post.title + " " + post.selftext
       Analyzer.detectEntities(combinedText, dictionary)
     }
-    
+
     // countByValue ya devuelve un Map directamente
     val typeStats = allEntities
     .map(_.entityType)
     .countByValue()   // devuelve Map[String, Long], no necesita collect masivo
+    .map { case (k, v) => k -> v.toInt }  //Paso de Long a Int
 
     val entityCounts = allEntities
     .map(_.text)
     .countByValue()
+    .map { case (k, v) => k -> v.toInt }
 
     println(Formatters.formatTypeStats(typeStats))
     println()

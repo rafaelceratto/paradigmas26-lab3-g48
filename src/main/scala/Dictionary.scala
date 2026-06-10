@@ -31,6 +31,10 @@ object Dictionary {
   def loadAll(entitiesDir: String): List[NamedEntity] = {
     // Check if entities directory exists
     val dataDir = new java.io.File(entitiesDir)
+    if(!dataDir.exists()){
+      println(s"Error: entities directory '$entitiesDir' not found")
+      return List()
+    }
 
     val peopleOpt = loadFromFile(s"$entitiesDir/people.txt", "Person")
 
