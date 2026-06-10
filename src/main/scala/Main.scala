@@ -117,11 +117,13 @@ object Main {
     .map(_.entityType)
     .countByValue()   // devuelve Map[String, Long], no necesita collect masivo
     .map { case (k, v) => k -> v.toInt }  //Paso de Long a Int
+    .toMap
 
     val entityCounts = allEntities
-    .map(_.text)
+    .map(entity => (entity.entityType, entity.text))
     .countByValue()
     .map { case (k, v) => k -> v.toInt }
+    .toMap
 
     println(Formatters.formatTypeStats(typeStats))
     println()
