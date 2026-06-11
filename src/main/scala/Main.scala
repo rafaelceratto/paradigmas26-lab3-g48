@@ -61,6 +61,9 @@ object Main {
         }   
     }
 
+    //variable para medir el tiempo del procesamiento
+    val startTime = System.currentTimeMillis()
+    
     // Count feed successes/failures
     downloadResults.count()
     println(downloadFeedSuccess.value)
@@ -114,15 +117,15 @@ object Main {
 
     // countByValue ya devuelve un Map directamente
     val typeStatsBase= allEntities
-    .map(entity => (entity.entityType, 1))
-    .reduceByKey(_ + _)
-    .collect()
-    .toMap
+    .map(entity => (entity.entityType, 1))  //cada entidad ahora es (tipo, 1)
+    .reduceByKey(_ + _)                    //suma todos los 1 de la misma clave
+    .collect()                            //trae el resultado al driver
+    .toMap                               //convierte a map
 
     val typeStats = typeStatsBase + ("total" -> allEntities.count().toInt) //add para que imprima la cant de entidades
 
     val entityCounts = allEntities
-    .map(entity => ((entity.entityType, entity.text), 1))  // map → pares (clave, 1)
+    .map(entity => ((entity.entityType, entity.text), 1))    // map → pares (clave, 1)
     .reduceByKey(_ + _)                                     // reduce → suma por clave
     .collect()
     .toMap
@@ -130,5 +133,7 @@ object Main {
     println(Formatters.formatTypeStats(typeStats))
     println()
     println(Formatters.formatEntityStats(entityCounts, cmdArgs.topK))
+    val endTime = System.currentTimeMillis()    //variable para calcular el tiempo del programa
+    println(s"Tiempo total de ejecución: ${(endTime - startTime) / 1000.0} segundos")
   }
 }
