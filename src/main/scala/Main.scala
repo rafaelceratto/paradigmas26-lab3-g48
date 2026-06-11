@@ -113,16 +113,18 @@ object Main {
     }
 
     // countByValue ya devuelve un Map directamente
-    val typeStats = allEntities
-    .map(_.entityType)
-    .countByValue()   // devuelve Map[String, Long], no necesita collect masivo
-    .map { case (k, v) => k -> v.toInt }  //Paso de Long a Int
+    val typeStatsBase= allEntities
+    .map(entity => (entity.entityType, 1))
+    .reduceByKey(_ + _)
+    .collect()
     .toMap
 
+    val typeStats = typeStatsBase + ("total" -> allEntities.count().toInt) //add para que imprima la cant de entidades
+
     val entityCounts = allEntities
-    .map(entity => (entity.entityType, entity.text))
-    .countByValue()
-    .map { case (k, v) => k -> v.toInt }
+    .map(entity => ((entity.entityType, entity.text), 1))  // map → pares (clave, 1)
+    .reduceByKey(_ + _)                                     // reduce → suma por clave
+    .collect()
     .toMap
 
     println(Formatters.formatTypeStats(typeStats))

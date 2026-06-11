@@ -10,9 +10,15 @@ fork := true
 
 ThisBuild / javaOptions ++= Seq(
   "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED",
-  "--add-opens=java.base/java.nio=ALL-UNNAMED"
+  "--add-opens=java.base/java.nio=ALL-UNNAMED",
+  "--add-opens=java.base/sun.security.action=ALL-UNNAMED",
+  "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+  "--add-opens=java.base/java.util=ALL-UNNAMED",
+  "--add-opens=java.base/java.lang=ALL-UNNAMED",
+  "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+  "--add-opens=java.base/java.io=ALL-UNNAMED",
+  "--add-opens=java.base/java.net=ALL-UNNAMED"
 )
-
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-sql" % "3.5.1",
   "org.apache.spark" %% "spark-core" % "3.5.1",
