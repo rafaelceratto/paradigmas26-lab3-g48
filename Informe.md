@@ -62,3 +62,16 @@ Por ultimo debemos asegurar no tener efectos secundarios, porque Spark podría r
 
 ![Diagrama de flujo](img/DiagramaDeFlujo.png) 
 Como un extra dejo el diagrama que hice antes de implementarlo aca!
+
+## Sobre Accummulators
+
+Los accummulators los utilizamos cuando vamos a trabajar con workers, pero si una tarea falla y Spark la re-ejecuta, el accummulator se incrementaria las veces que se ejecute esa tarea. Por esta razon no son confiables para tomar decisiones logicas.
+Ademas los valores del accummulators estaran disponibles para ser leidos luego de que se ejecute alguna accion terminal.
+
+## Comparacion de tiempos
+
+Salida del esqueleto: [success] Total time: 23 s, completed 3 jun 2026, 16:49:08
+Salida del programa luego del ej 4: [info] Tiempo total de ejecución: 36.228 segundos
+                                    [success] Total time: 45 s, completed 11 jun 2026 19:50:29
+El tiempo de sbt incluye compilación e inicialización, mientras que nuestra medición con System.currentTimeMillis() captura solo el tiempo real del pipeline. Manejamos el triple de posts y el tiempo claramente aumentó moderadamente.
+Sin embargo, la versión con Spark no es más rápida que el esqueleto secuencial en este caso. Esto se debe al overhead de inicialización de Spark que para datasets pequeños supera el beneficio de la paralelización. La ventaja de Spark se apreciaría con miles de feeds procesados en paralelo, donde ese costo fijo se amortiza.
