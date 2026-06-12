@@ -38,6 +38,10 @@ object Main {
     val postsDownloads = sc.longAccumulator("Posts Download")        //posts descargados en total
     val postsDiscard = sc.longAccumulator("Posts Discard")        //posts descartados por texto nulo o vacio
 
+    //variable para medir el tiempo del procesamiento
+    val startTime = System.currentTimeMillis()
+
+
     // Download feeds and parse posts, manejo excepciones
     val downloadResults = subscriptionsRDD.flatMap { subscription =>
         val feedOpt = FileIO.downloadFeed(subscription.url)
@@ -59,11 +63,8 @@ object Main {
               Iterator.empty
           }
         }   
-    }
+    }.cache()
 
-    //variable para medir el tiempo del procesamiento
-    val startTime = System.currentTimeMillis()
-    
     // Count feed successes/failures
     downloadResults.count()
     println(downloadFeedSuccess.value)
@@ -77,7 +78,9 @@ object Main {
       post.title.nonEmpty &&
       post.selftext.nonEmpty &&
       post.selftext.trim.nonEmpty
-    }
+    }.cache()
+
+    downloadResults.unpersist() //libero la memoria de downloadResults
 
     val postsFiltered = postsDiscard.value  //cantidad de posts filtrados (los vacios)
 
@@ -129,10 +132,13 @@ object Main {
     .reduceByKey(_ + _)                                     // reduce → suma por clave
     .collect()
     .toMap
-
+    
     println(Formatters.formatTypeStats(typeStats))
     println()
     println(Formatters.formatEntityStats(entityCounts, cmdArgs.topK))
+    
+    filteredPosts.unpersist() //libero memoria de filteredPosts
+
     val endTime = System.currentTimeMillis()    //variable para calcular el tiempo del programa
     println(s"Tiempo total de ejecución: ${(endTime - startTime) / 1000.0} segundos")
   }

@@ -63,6 +63,28 @@ Por ultimo debemos asegurar no tener efectos secundarios, porque Spark podría r
 ![Diagrama de flujo](img/DiagramaDeFlujo.png) 
 Como un extra dejo el diagrama que hice antes de implementarlo aca!
 
+## Ejercicio 2
+
+## Excepcion en flatMap
+
+Si no manejamos las excepciones entonces Spark re ejecutaria las tareas una cantidad configurable de veces. Si falla en todas entonces cancela todo, perdiendo todo el procesamiento de los feeds que si funcionaban.
+
+## Ejercicio 3
+
+## Impacto de reduceByKey en el cluster.
+
+Spark tiene que juntar toidos los elementos de la misma clave, los cuales estan distribuidos en distintos workers. Para hacer esto hace un Shuffle, por lo que es inevitable porque para contar tenes que ver si o si todos los posts de todos los workers.
+
+## Restricciones de reduceByKey 
+
+Es necesario que se cumpla la asociatividad y la conmutatividad, pues Spark no garantiza el orden de llegada de los elementos que vienen de los distintos workers.
+
+## Dictionary
+
+El dictionary lo cargamos en el driver, especificamente con "Dictionary.loadAll()", pero luego Spark lo serializa y lo envia a cada worker cuando ejecutan el flatMap.
+
+## Ejercicio 4
+
 ## Sobre Accummulators
 
 Los accummulators los utilizamos cuando vamos a trabajar con workers, pero si una tarea falla y Spark la re-ejecuta, el accummulator se incrementaria las veces que se ejecute esa tarea. Por esta razon no son confiables para tomar decisiones logicas.
@@ -75,3 +97,17 @@ Salida del programa luego del ej 4: [info] Tiempo total de ejecución: 36.228 se
                                     [success] Total time: 45 s, completed 11 jun 2026 19:50:29
 El tiempo de sbt incluye compilación e inicialización, mientras que nuestra medición con System.currentTimeMillis() captura solo el tiempo real del pipeline. Manejamos el triple de posts y el tiempo claramente aumentó moderadamente.
 Sin embargo, la versión con Spark no es más rápida que el esqueleto secuencial en este caso. Esto se debe al overhead de inicialización de Spark que para datasets pequeños supera el beneficio de la paralelización. La ventaja de Spark se apreciaría con miles de feeds procesados en paralelo, donde ese costo fijo se amortiza.
+
+## Ejercicio 5
+
+## Influencia de Cache
+
+Sin usar .cache(), cada accion terminal se recomputaria el pipeline completo desde el principio. En nuestro caso downloadResults se recomputaria al menos 6 veces. Al utilizar .cache(), solo lo haria 1 vez. 
+## Llamadas a collect
+
+Si llamaramos a .collect() entre un flatMap y un Map, traeriamos a todos los datos al driver, lo cual en un dataset grande podriamos agotar la memoria. Además el map y reduceByKey siguientes correrían en el driver de forma secuencial, perdiendo toda la distribución del trabajo.
+
+
+## Almacenamiento en memoria de cache
+
+Al ser lazy se va a almacenar en memoria a la primera vez que se le ejecute una accion terminal sobre el. En nuestro caso seria cuando se hace downloadResults.count()
