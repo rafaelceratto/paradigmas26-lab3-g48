@@ -1,8 +1,6 @@
 import scala.io.Source
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
-import java.io.FileNotFoundException
-import org.json4s.ParserUtil.ParseException
 
 object FileIO {
 
@@ -13,31 +11,16 @@ object FileIO {
    *         returns empty list if file not found
    */
   def readSubscriptions(filePath: String): List[Option[Subscription]] = {
-    try{
-      implicit val formats: Formats = DefaultFormats
-      val source = Source.fromFile(filePath)
-      val content = source.mkString
-      source.close()
+    implicit val formats: Formats = DefaultFormats
+    val source = Source.fromFile(filePath)
+    val content = source.mkString
+    source.close()
 
-      val json = parse(content)
-      val subscriptions = json.extract[List[Map[String, String]]]
+    val json = parse(content)
+    val subscriptions = json.extract[List[Map[String, String]]]
 
-      subscriptions.map { sub => //aca coloco un try, porque el error de parseo puede pasar en cada subscripcion.
-        try{
-       Some(Subscription(sub("name"), sub("url")))
-        } catch {
-         case e : NoSuchElementException =>
-           println(s"Warning: Skipping malformed subscription (missing 'name' or 'url' field)")
-           None
-       }
-      }
-    } catch {
-      case e : FileNotFoundException =>
-        println(s"Error: Could not load $filePath - file not found")
-        List()
-      case e : ParseException =>
-        println(s"Error: Could not load $filePath - invalid JSON format")
-        List()
+    subscriptions.map { sub =>
+      Some(Subscription(sub("name"), sub("url")))
     }
   }
 
@@ -47,11 +30,11 @@ object FileIO {
    * @return Option containing JSON as String, None on network error or timeout
    */
   def downloadFeed(url: String): Option[String] = {
-      val source = Source.fromURL(url)
-      val content = source.mkString
-      source.close()
-      Some(content)
-  } //errores manejados en el flatMap del main
+    val source = Source.fromURL(url)
+    val content = source.mkString
+    source.close()
+    Some(content)
+  }
 
   /**
    * Read dictionary file line by line.
@@ -59,19 +42,13 @@ object FileIO {
    * @return Option containing list of entities, None if file missing
    */
   def readDictionaryFile(filePath: String): Option[List[String]] = {
-    try{
-      val source = Source.fromFile(filePath)
-      val lines = source.getLines()
-        .map(_.trim)
-        .filter(_.nonEmpty)
-        .filterNot(_.startsWith("#"))
-        .toList
-      source.close()
-      Some(lines)
-    } catch {
-      case e : FileNotFoundException =>
-        println(s"Warning: Could not load $filePath")
-        None
-    }
+    val source = Source.fromFile(filePath)
+    val lines = source.getLines()
+      .map(_.trim)
+      .filter(_.nonEmpty)
+      .filterNot(_.startsWith("#"))
+      .toList
+    source.close()
+    Some(lines)
   }
 }
